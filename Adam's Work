@@ -1,0 +1,125 @@
+//Quick FYI
+//I will update this after every change I make.
+//Please take note of any modifications if any that I have made to your code after I read through and test.
+//Also if you find any mistakes let me know.
+public class SpreadSheetProject {
+
+    private String[] tabs;
+
+    private int nextAvailable; // Number of items in list (note: NOT capacity)
+
+    private int nextSheetNumber; // Number of next sheet added to list
+   
+    private int capacity;
+
+    public SpreadSheetProject() {
+
+        tabs = new String[256];
+
+        tabs[0] = "Sheet1";
+
+        tabs[1] = "Sheet2";
+
+        tabs[2] = "Sheet3";
+
+        nextAvailable = 3; // Initially the list has 3 tabs (as shown above)
+
+        nextSheetNumber = 4; // The next NEW sheet number
+       
+        capacity=3;
+
+    }
+    //add
+    public boolean add(){
+        if(nextAvailable<256){
+        tabs[nextAvailable]="Sheet"+nextSheetNumber;
+        nextAvailable++;
+        nextSheetNumber++;
+        capacity++;
+        return true;
+    }else{return false;}
+    }
+    //remove index
+    public String remove(int index){
+        String temp[]=new String[256];
+        String output="";
+        index = index -1;
+        //*index -1* because the range is 1 >= index <= list length
+        if (index>=0 && index<=capacity){
+            for (int i=0;i<capacity;i++){
+                if (i<index){
+                    temp[i]=tabs[i];
+                }
+                if (i>index){
+                    temp[i-1]=tabs[i];
+                }
+                if (i==index){
+                    output=tabs[index];
+                }
+            }
+            capacity--;
+            tabs=temp;
+        }
+        return output;
+    }
+    //remove string
+    public int remove(String sheetName) {       
+        int pos = index(sheetName);
+        tabs[pos] = null;
+        String[] temp = new String[256];
+        int i = 0;
+        int posOffset = pos + i;
+        if (pos != -1) {
+            while(i != pos) {
+                temp[i] = tabs[i];
+                i++;
+            }
+            for(i = 0; i < (capacity - pos); i++) {
+                temp[posOffset] = tabs[posOffset + 1];
+            }
+            tabs = temp;
+            capacity--;
+            return pos;
+        } else { return -1;
+        }
+    }
+    //display
+    public void Display(){
+        for(int i=0;i<capacity;i++){
+            System.out.println(tabs[i]);
+        }
+    }
+    //index
+    public int index(String sheetName) {
+        for(int i = 0; i < capacity; i++){
+            if (tabs[i]==sheetName) {
+                return i;
+            } 
+        }
+        return -1;
+    }
+    //used length of array
+    public int length() {
+        return capacity;
+    }        
+    //finds sheet name by index
+    public String sheetName(int index) {
+        int sheetNamePos = index - 1;
+        //*index -1* because the range is 1 >= index <= list length
+        if ((sheetNamePos < capacity) && (sheetNamePos > 0)) {
+            return tabs[index];
+        } else {
+            return null;
+        }
+    }
+    //rename
+    public int rename(String currentName, String newName) {
+        int renamePos = index(currentName);
+        if(renamePos != -1) {
+            tabs[renamePos] = newName;
+            return renamePos;
+        } else {
+            return -1;
+        }
+    }
+}
