@@ -107,7 +107,7 @@ public class SpreadSheetProject {
         int sheetNamePos = index - 1;
         //*index -1* because the range is 1 >= index <= list length
         if ((sheetNamePos < capacity) && (sheetNamePos > 0)) {
-            return tabs[index];
+            return tabs[sheetNamePos];
         } else {
             return null;
         }
