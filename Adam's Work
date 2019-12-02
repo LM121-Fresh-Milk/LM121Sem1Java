@@ -72,7 +72,11 @@ public class SpreadSheetProject {
     //display
     public void Display(){
         for(int i=0;i<capacity;i++){
-            System.out.println(tabs[i]);
+            System.out.print(tabs[i]); //Decided to print horizontally as BlueJ seems to limit how many lines can be used;
+            if (i == capacity - 1) {
+                System.out.print("\n");
+            }
+            System.out.print(", ");
         }
         System.out.println("- - - - -");
     }
@@ -111,13 +115,11 @@ public class SpreadSheetProject {
     }
     //moveToEnd by index position
     public String moveToEnd(int from) {
-        int moveEndPos = from;
-        //*from -1* because the range is 1 >= index <= list length
-        if ((moveEndPos < capacity) && (moveEndPos >= 0)) {
-            String output = tabs[moveEndPos - 1];
-            remove(moveEndPos);
-            capacity++;
-            tabs[capacity - 1] = output;
+        if ((from < capacity) && (from >= 0)) {
+            String output = tabs[from - 1];
+            remove(from); //did not decrement from as the remove function decrements it.
+            tabs[capacity] = output;
+            capacity++; //incremented capactiy as the remove function decrements it but we don't want it to change in this case..
             return output;
         } else {
             return null;
@@ -125,10 +127,9 @@ public class SpreadSheetProject {
     }
     //moveToEnd by sheet name
     public int moveToEnd(String from) {
-        int moveEndPos = index(from), i = 0, posOffset = moveEndPos + i;
-        String[] temp = new String[256];        
+        int moveEndPos = index(from);        
         if (moveEndPos != -1) {
-            moveEndPos = moveEndPos + 1;
+            moveEndPos++; //incremented moveEndPos so that the previous moveToEnd function can be used.
             int output = index(from);
             moveToEnd(moveEndPos);
             return output;
@@ -136,78 +137,42 @@ public class SpreadSheetProject {
             return moveEndPos;
         }
     }
-    //move sheet by index position
+    //move by sheet position
     public String move(int from, int to, boolean before) {
-        String temp1 = tabs[from - 1];
-        String[] temp = new String[256];
-        to = to - 1;
-        if ((from >= 0) && (from <= capacity)){
-            if ((to >= 0) && (to <= capacity) && (to != from)) {
-                if (before == true) {
-                    //to = to - 1;
-                    remove(from);
-                    capacity++;
-                    nextAvailable++;
-                    if (to == 0) {
-                    for(int i = 0; i < to - 1; i++) {
-                        temp[i] = tabs[i];
-                    }
-                    for(int i = to; i <= capacity + 1; i++) {
-                        temp[i + 1] = tabs[i];
-                    }
-                    temp[to] = temp1;
-                    tabs = temp;
-                    return temp1;
-                    } else {
-                        for(int i = 0; i < to; i++) {
-                        temp[i] = tabs[i];
-                    }
-                    for(int i = to; i <= capacity + 1; i++) {
-                        temp[i + 1] = tabs[i];
-                    }
-                    temp[to] = temp1;
-                    tabs = temp;
-                    }
-                    return temp1;
-                } else { 
-                    //to = to - 1;
-                    remove(from);
-                    capacity++;
-                    nextAvailable++;
-                    if (to == 0) {
-                    for(int i = 0; i < to + 1; i++) {
-                        temp[i] = tabs[i];
-                    }
-                    for(int i = to + 1 ; i <= capacity + 1; i++) {
-                        temp[i + 1] = tabs[i];
-                    }
-                    temp[to + 1] = temp1;
-                    tabs = temp;
-                    return temp1;
-                    } else {
-                        for(int i = 0; i < to; i++) {
-                        temp[i] = tabs[i];
-                    }
-                    for(int i = to; i <= capacity + 1; i++) {
-                        temp[i] = tabs[i];
-                    }
-                    temp[to] = temp1;
-                    tabs = temp;
-                    }
-                    return temp1;
+        if((from > capacity) || (to > capacity) || (from == to) || (from <= 0) || (to <= 0)) {
+            return null;
+        } else {
+            to--;
+            from--; //decremented to and for as users would input 1 for position 0 and so on...
+            String temp1 = tabs[from];
+            if (from < to) {
+                if(before == true) {
+                    to--;
                 }
+                for(from = from; from < to; from++) {
+                    tabs[from] = tabs[from + 1];
+                }
+                tabs[to] = temp1;
+                return temp1;
+            } else {
+                if (before == false) {
+                    to++;
+                }
+                for(from = from; from > to; from--) {
+                    tabs[from] = tabs[from - 1];
+                }    
+                tabs[to] = temp1;
+                return temp1;
             }
         }
-        return null;
     }
     //move by sheet name
     public int move(String from, String to, boolean before) {
-        int toPos = index(to) + 1;
-        int fromPos = index(from) + 1;
-        String temp1 = tabs[fromPos];
-        String[] temp = new String[256];
-        if (fromPos != -1){
-            if ((toPos >= -1) && (toPos != fromPos)) {
+        int toPos = index(to);
+        int fromPos = index(from);
+        if ((fromPos != -1) || (toPos >= -1) || (toPos != fromPos)){
+                    toPos++;
+                    fromPos++; //incremented toPos and fromPos so that the previous move class can be used.
                     if(before == true) {
                         move(fromPos,toPos, true);
                         return fromPos;
@@ -215,9 +180,7 @@ public class SpreadSheetProject {
                         move(fromPos,toPos, false);
                         return fromPos;
                     }
-                }
             }
-        
         return -1;
     }
 }
