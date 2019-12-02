@@ -74,6 +74,7 @@ public class SpreadSheetProject {
         for(int i=0;i<capacity;i++){
             System.out.println(tabs[i]);
         }
+        System.out.println("- - - - -");
     }
     //index
     public int index(String sheetName) {
@@ -110,21 +111,13 @@ public class SpreadSheetProject {
     }
     //moveToEnd by index position
     public String moveToEnd(int from) {
-        int moveEndPos = from - 1, i = 0, posOffset = moveEndPos + i;
-        String[] temp = new String[256];
+        int moveEndPos = from;
         //*from -1* because the range is 1 >= index <= list length
         if ((moveEndPos < capacity) && (moveEndPos >= 0)) {
-            tabs[nextAvailable] = tabs[moveEndPos];
-            String output = tabs[moveEndPos];
-            tabs[moveEndPos] = null;
-            while( i != moveEndPos) {
-                temp[i] = tabs[i];
-                i++;
-            }
-            for(i = 0; i < (capacity - moveEndPos); i++) {
-                temp[posOffset] = tabs[posOffset + 1];
-            }
-            tabs = temp;
+            String output = tabs[moveEndPos - 1];
+            remove(moveEndPos);
+            capacity++;
+            tabs[capacity - 1] = output;
             return output;
         } else {
             return null;
@@ -135,17 +128,9 @@ public class SpreadSheetProject {
         int moveEndPos = index(from), i = 0, posOffset = moveEndPos + i;
         String[] temp = new String[256];        
         if (moveEndPos != -1) {
-            tabs[nextAvailable] = tabs[moveEndPos];
-            int output = moveEndPos;
-            tabs[moveEndPos] = null;
-            while( i != moveEndPos) {
-                temp[i] = tabs[i];
-                i++;
-            }
-            for(i = 0; i < (capacity - moveEndPos); i++) {
-                temp[posOffset] = tabs[posOffset + 1];
-            }
-            tabs = temp;
+            moveEndPos = moveEndPos + 1;
+            int output = index(from);
+            moveToEnd(moveEndPos);
             return output;
         } else {
             return moveEndPos;
@@ -155,10 +140,11 @@ public class SpreadSheetProject {
     public String move(int from, int to, boolean before) {
         String temp1 = tabs[from - 1];
         String[] temp = new String[256];
+        to = to - 1;
         if ((from >= 0) && (from <= capacity)){
             if ((to >= 0) && (to <= capacity) && (to != from)) {
                 if (before == true) {
-                    to = to - 1;
+                    //to = to - 1;
                     remove(from);
                     capacity++;
                     nextAvailable++;
@@ -173,18 +159,18 @@ public class SpreadSheetProject {
                     tabs = temp;
                     return temp1;
                     } else {
-                        for(int i = 0; i < to - 1; i++) {
+                        for(int i = 0; i < to; i++) {
                         temp[i] = tabs[i];
                     }
-                    for(int i = to -1 ; i <= capacity + 1; i++) {
+                    for(int i = to; i <= capacity + 1; i++) {
                         temp[i + 1] = tabs[i];
                     }
-                    temp[to -1] = temp1;
+                    temp[to] = temp1;
                     tabs = temp;
                     }
                     return temp1;
                 } else { 
-                    to = to - 1;
+                    //to = to - 1;
                     remove(from);
                     capacity++;
                     nextAvailable++;
@@ -192,7 +178,7 @@ public class SpreadSheetProject {
                     for(int i = 0; i < to + 1; i++) {
                         temp[i] = tabs[i];
                     }
-                    for(int i = to + 1; i <= capacity + 1; i++) {
+                    for(int i = to + 1 ; i <= capacity + 1; i++) {
                         temp[i + 1] = tabs[i];
                     }
                     temp[to + 1] = temp1;
@@ -216,65 +202,22 @@ public class SpreadSheetProject {
     }
     //move by sheet name
     public int move(String from, String to, boolean before) {
-        int toPos = index(to);
-        int fromPos = index(from);
+        int toPos = index(to) + 1;
+        int fromPos = index(from) + 1;
         String temp1 = tabs[fromPos];
         String[] temp = new String[256];
         if (fromPos != -1){
             if ((toPos >= -1) && (toPos != fromPos)) {
-                if (before == true) {
-                    remove(from);
-                    capacity++;
-                    nextAvailable++;
-                    if (toPos == 0) {
-                    for(int i = 0; i < toPos - 1; i++) {
-                        temp[i] = tabs[i];
-                    }
-                    for(int i = toPos; i <= capacity + 1; i++) {
-                        temp[i + 1] = tabs[i];
-                    }
-                    temp[toPos] = temp1;
-                    tabs = temp;
-                    return fromPos;
-                    } else {
-                        for(int i = 0; i < toPos - 1; i++) {
-                        temp[i] = tabs[i];
-                    }
-                    for(int i = toPos + 1 ; i <= capacity + 1; i++) {
-                        temp[i + 1] = tabs[i];
-                    }
-                    temp[toPos -1] = temp1;
-                    tabs = temp;
-                    }
-                    return fromPos;
-                } else { 
-                    remove(from);
-                    capacity++;
-                    nextAvailable++;
-                    if (toPos == 0) {
-                        for(int i = 0; i < toPos + 1; i++) {
-                            temp[i] = tabs[i];
-                        }
-                        for(int i = toPos; i <= capacity + 1; i++) {
-                            temp[i + 1] = tabs[i];
-                        }
-                        temp[toPos] = temp1;
-                        tabs = temp;
+                    if(before == true) {
+                        move(fromPos,toPos, true);
                         return fromPos;
                     } else {
-                        for(int i = 0; i < toPos; i++) {
-                            temp[i] = tabs[i];
-                        }
-                        for(int i = toPos; i <= capacity + 1; i++) {
-                            temp[i + 1] = tabs[i];
-                        }
-                        temp[toPos] = temp1;
-                        tabs = temp;
+                        move(fromPos,toPos, false);
+                        return fromPos;
                     }
-                    return fromPos;
                 }
             }
-        }
+        
         return -1;
     }
 }
