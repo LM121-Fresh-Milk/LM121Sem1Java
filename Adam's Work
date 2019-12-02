@@ -75,8 +75,9 @@ public class SpreadSheetProject {
             System.out.print(tabs[i]); //Decided to print horizontally as BlueJ seems to limit how many lines can be used;
             if (i == capacity - 1) {
                 System.out.print("\n");
+            } else {
+                System.out.print(", ");
             }
-            System.out.print(", ");
         }
         System.out.println("- - - - -");
     }
