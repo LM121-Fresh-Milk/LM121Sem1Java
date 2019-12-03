@@ -1,10 +1,10 @@
 public class DriverA {
     public static void main(String[] args) {
-        SpreadSheetProject anInstance = new SpreadSheetProject(); // <--- Create an instance of the class
-        anInstance.add(); // <--- Show that the add operation works by adding a new sheet
-        anInstance.Display(); // <--- Show that the Display operation works by displaying the current contents of the list
-        anInstance.remove(1); // <--- Show that the remove(int index) operation works by removing the sheet name at position 1
-        anInstance.Display(); // <--- Show the result of removing the sheet at index 1
+        SpreadSheetProject anInstance = new SpreadSheetProject();
+        anInstance.add(); // 
+        anInstance.Display(); 
+        anInstance.remove(1); 
+        anInstance.Display(); 
         anInstance.remove("Sheet3");
         anInstance.Display();
         for(int i = 0; i < 10; i++) {
@@ -28,6 +28,5 @@ public class DriverA {
         System.out.println(anInstance.length());
         System.out.println(anInstance.index("Sheet9"));
         System.out.println(anInstance.sheetName(7));
-        // Ideally you should create MORE THAN 1 instance of the SpreadSheetTabs class and show the operations being used on them
     }
 }
