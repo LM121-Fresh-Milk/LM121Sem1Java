@@ -1,0 +1,31 @@
+public class DriverC {
+    public static void main(String[] args) {
+        SpreadSheetProject anInstance = new SpreadSheetProject();
+        for(int i = 0; i < 253; i++) {
+            anInstance.add();
+        }
+        anInstance.Display();
+        anInstance.remove(216);
+        anInstance.Display();
+        anInstance.remove("Sheet147");
+        anInstance.Display();
+        anInstance.rename("Sheet208", "Yurt");
+        anInstance.Display();
+        anInstance.rename("Sheet17", "A1 Steak Sauce");
+        anInstance.moveToEnd(9);
+        anInstance.Display();
+        anInstance.moveToEnd("Sheet114");
+        anInstance.Display();
+        anInstance.move(69,91,true);
+        anInstance.Display();
+        anInstance.move(104,1,false);
+        anInstance.Display();
+        anInstance.move("Sheet176","Yurt",true);
+        anInstance.Display();
+        anInstance.move("Sheet18", "Sheet9", false);
+        anInstance.Display();
+        System.out.println(anInstance.length());
+        System.out.println(anInstance.index("Sheet169"));
+        System.out.println(anInstance.sheetName(178));
+    }
+}
